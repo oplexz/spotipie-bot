@@ -7,13 +7,13 @@ from sp_bot.modules.misc import Fonts
 
 
 def truncate(text, font, limit):
-    edited = True if font.getsize(text)[0] > limit else False
-    while font.getsize(text)[0] > limit:
+    edited = True if font.getbbox(text)[2] > limit else False
+    while font.getbbox(text)[2] > limit:
         text = text[:-1]
     if edited:
-        return(text.strip() + '..')
+        return (text.strip() + '..')
     else:
-        return(text.strip())
+        return (text.strip())
 
 
 def checkUnicode(text):
@@ -39,14 +39,14 @@ def drawImage(res, username, pfp):
         link = coverart
         r = requests.get(link)
         art = Image.open(BytesIO(r.content))
-        art.thumbnail((200, 200), Image.ANTIALIAS)
+        art.thumbnail((200, 200), Image.LANCZOS)
         canvas.paste(art, (25, 25))
     except Exception as ex:
         print(ex)
 
     # profile pic
     profile_pic = Image.open(BytesIO(pfp.content))
-    profile_pic.thumbnail((52, 52), Image.ANTIALIAS)
+    profile_pic.thumbnail((52, 52), Image.LANCZOS)
     canvas.paste(profile_pic, (523, 25))
 
     # set font sizes
@@ -75,10 +75,10 @@ def drawImage(res, username, pfp):
               fill=white, font=albumfont)
 
     # draw progress bar on canvas
-    draw.rectangle([(578, 222), (248, 224)],
+    draw.rectangle([(248, 222), (578, 224)],
                    fill='#404040')
-    draw.rectangle([(248 + (currtime / totaltime * 330), 222),
-                    (248, 224)], fill='#B3B3B3')
+    draw.rectangle([(248, 222),
+                    (248 + (currtime / totaltime * 330), 224)], fill='#B3B3B3')
 
     # return canvas
     image = BytesIO()
