@@ -1,0 +1,21 @@
+version: "3"
+services:
+    bot:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        environment:
+            - API_KEY=${API_KEY}
+            - SPOTIFY_CLIENT_ID=${SPOTIFY_CLIENT_ID}
+            - SPOTIFY_CLIENT_SECRET=${SPOTIFY_CLIENT_SECRET}
+            - MONGO_USR=${MONGO_USR}
+            - MONGO_PASS=${MONGO_PASS}
+            - MONGO_COLL=${MONGO_COLL}
+            - TEMP_CHANNEL=${TEMP_CHANNEL}
+            - REDIRECT_URI=${REDIRECT_URI}
+        networks:
+            - spotipie
+
+networks:
+    spotipie:
+        external: true
