@@ -2,8 +2,6 @@
 
 A fork of [Neel's Spotipie-bot](https://github.com/k-neel/spotipie-bot).
 
-https://developer.spotify.com/dashboard
-
 ## Environment variables and their descriptions
 
 | Variable                  | Description                                | Notes                                                                                           |
