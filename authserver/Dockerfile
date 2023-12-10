@@ -1,4 +1,4 @@
-FROM node:12.17.0-alpine
+FROM node:20.10.0-alpine
 
 WORKDIR /usr
 COPY package.json ./
@@ -9,11 +9,11 @@ RUN npm install
 RUN npm run build
 
 ## this is stage two , where the app actually runs
-FROM node:12.17.0-alpine
+FROM node:20.10.0-alpine
 
 WORKDIR /usr
 COPY package.json ./
-RUN npm install --only=production
+RUN npm install --omit=dev
 COPY --from=0 /usr/dist .
 RUN npm install pm2 -g
 EXPOSE 80

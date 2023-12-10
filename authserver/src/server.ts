@@ -15,12 +15,7 @@ process.on("unhandledRejection", (ex) => {
 
 const mongoUrl: any = MONGODB_URI;
 mongoose
-    .connect(mongoUrl, {
-        useUnifiedTopology: true,
-        useNewUrlParser: true,
-        useCreateIndex: true,
-        useFindAndModify: false,
-    })
+    .connect(mongoUrl)
     .then(() => {
         console.log(`Connected to ${mongoUrl}...`);
     })
