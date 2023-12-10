@@ -10,8 +10,6 @@ if (fs.existsSync(".env")) {
 export const MONGO_USER = process.env["MONGO_USER"];
 export const MONGO_PASSWORD = process.env["MONGO_PASSWORD"];
 export const MONGO_DB = process.env["MONGO_DB"] || "spotipie";
-export const ENVIRONMENT = process.env.NODE_ENV;
-const prod = ENVIRONMENT === "production";
 // FIXME: Take environment into consideration
 
 if (!MONGO_USER) {
