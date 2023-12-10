@@ -15,6 +15,9 @@ services:
             - MONGO_COLL=${MONGO_COLL}
             - TEMP_CHANNEL=${TEMP_CHANNEL}
             - REDIRECT_URI=${REDIRECT_URI}
+        depends_on:
+            mongo:
+                condition: service_healthy
 
     authserver:
         container_name: spotipie-authserver
@@ -31,11 +34,14 @@ services:
         ports:
             - 6969:6969
         depends_on:
-            - mongo
+            mongo:
+                condition: service_healthy
 
     mongo:
         image: mongo
         restart: unless-stopped
+        healthcheck:
+            test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
         environment:
             - MONGO_INITDB_ROOT_USERNAME=${MONGO_ADMIN_USERNAME}
             - MONGO_INITDB_ROOT_PASSWORD=${MONGO_ADMIN_PASSWORD}
