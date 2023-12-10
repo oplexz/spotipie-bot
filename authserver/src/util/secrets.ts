@@ -6,19 +6,25 @@ if (fs.existsSync(".env")) {
     dotenv.config({ path: ".env" });
 }
 
+// TODO: MONGO_HOST (related to NODE_ENV)
+export const MONGO_USER = process.env["MONGO_USER"];
+export const MONGO_PASSWORD = process.env["MONGO_PASSWORD"];
+export const MONGO_DB = process.env["MONGO_DB"] || "spotipie";
 export const ENVIRONMENT = process.env.NODE_ENV;
 const prod = ENVIRONMENT === "production";
-export const MONGODB_URI = prod ? process.env["MONGODB_URI"] : process.env["MONGODB_URI_LOCAL"];
+// FIXME: Take environment into consideration
+
+if (!MONGO_USER) {
+    console.log("No mongo user. Set MONGO_USER environment variable.");
+}
+
+if (!MONGO_PASSWORD) {
+    console.log("No mongo password. Set MONGO_PASSWORD environment variable.");
+}
+
+export const MONGODB_URI = `mongodb://${MONGO_USER}:${MONGO_PASSWORD}@mongo:27017/${MONGO_DB}`;
 export const BOT_URL = process.env["BOT_URL"];
 
 if (!BOT_URL) {
     console.log("No client secret. Set SESSION_SECRET environment variable.");
-}
-
-if (!MONGODB_URI) {
-    if (prod) {
-        console.log("No mongo connection string. Set MONGODB_URI environment variable.");
-    } else {
-        console.log("No mongo connection string. Set MONGODB_URI_LOCAL environment variable.");
-    }
 }

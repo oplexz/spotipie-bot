@@ -22,9 +22,9 @@ CLIENT_SECRET = Config.SPOTIFY_CLIENT_SECRET
 REDIRECT_URI = Config.REDIRECT_URI
 
 # MongoDB secrets
-MONGO_USR = Config.MONGO_USR
-MONGO_PASS = Config.MONGO_PASS
-COL = Config.MONGO_COLL
+MONGO_USER = Config.MONGO_USER
+MONGO_PASSWORD = Config.MONGO_PASSWORD
+MONGO_DB = Config.MONGO_DB
 
 TEMP_CHANNEL = Config.TEMP_CHANNEL
 
@@ -32,7 +32,4 @@ updater = tg.Updater(TOKEN, use_context=True)
 dispatcher = updater.dispatcher
 
 SESSION = MongoClient(
-    f"mongodb://{MONGO_USR}:{MONGO_PASS}@mongo:27017/spotipie?authSource=admin")
-
-# SESSION = MongoClient(
-#     f"mongodb://{MONGO_USR}:{MONGO_PASS}@{COL}-shard-00-00.ibx7n.mongodb.net:27017,spotipie-shard-00-01.ibx7n.mongodb.net:27017,{COL}-shard-00-02.ibx7n.mongodb.net:27017/{COL}?ssl=true&replicaSet=atlas-lnda18-shard-0&authSource=admin&retryWrites=true&w=majority")
+    f"mongodb://{MONGO_USER}:{MONGO_PASSWORD}@mongo:27017/{MONGO_DB}")
