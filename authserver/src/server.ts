@@ -10,25 +10,23 @@ app.get("/", callbackController.homeRoute);
 app.get("/callback", callbackController.callbackRoute);
 
 process.on("unhandledRejection", (ex) => {
-  throw ex;
+    throw ex;
 });
 
 const mongoUrl: any = MONGODB_URI;
 mongoose
-  .connect(mongoUrl, {
-    useUnifiedTopology: true,
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
-  })
-  .then(() => {
-    console.log(`Connected to ${mongoUrl}...`);
-  })
-  .catch((err) => {
-    console.log(
-      `MongoDB connection error. Please make sure MongoDB is running. ${err}`
-    );
-  });
+    .connect(mongoUrl, {
+        useUnifiedTopology: true,
+        useNewUrlParser: true,
+        useCreateIndex: true,
+        useFindAndModify: false,
+    })
+    .then(() => {
+        console.log(`Connected to ${mongoUrl}...`);
+    })
+    .catch((err) => {
+        console.log(`MongoDB connection error. Please make sure MongoDB is running. ${err}`);
+    });
 
 const port = process.env.PORT || 6969;
 app.listen(port, () => console.log(`Listening on port ${port}...`));

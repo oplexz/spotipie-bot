@@ -1,4 +1,4 @@
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 import fs from "fs";
 
 if (fs.existsSync(".env")) {

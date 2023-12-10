@@ -5,16 +5,14 @@ const authCode = new mongoose.Schema({
         type: String,
         required: true,
         minlength: 5,
-        maxlength: 255
+        maxlength: 255,
     },
     ip: {
         type: String,
         required: true,
         minlength: 3,
-        maxlength: 155
-    }
+        maxlength: 155,
+    },
 });
 
-export const Code = mongoose.model('Codes', authCode);
-
-
+export const Code = mongoose.model("Codes", authCode);
