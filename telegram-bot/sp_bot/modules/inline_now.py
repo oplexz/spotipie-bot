@@ -5,7 +5,7 @@ from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton, InlineQ
 from telegram.ext import CommandHandler, CallbackContext, ConversationHandler, InlineQueryHandler
 
 from sp_bot import dispatcher, TEMP_CHANNEL
-from sp_bot.modules.misc.cook_image import drawImage
+from sp_bot.modules.misc.cook_image import draw_image
 from sp_bot.modules.db import DATABASE
 from sp_bot.modules.misc.request_spotify import SPOTIFY
 
@@ -48,7 +48,7 @@ def inlineNowPlaying(update: Update, context: CallbackContext):
                 [], switch_pm_text="You are listening to ads.", switch_pm_parameter='ads', cache_time=0)
         elif res['currently_playing_type'] == 'track':
             username = is_user["username"]
-            image = drawImage(res, username, pfp)
+            image = draw_image(res, username, pfp)
             button = InlineKeyboardButton(
                 text="Play on Spotify", url=res['item']['external_urls']['spotify'])
             temp = context.bot.send_photo(TEMP_CHANNEL, photo=image)

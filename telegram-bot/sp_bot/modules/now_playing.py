@@ -4,7 +4,7 @@ from telegram import Message, Chat, Update, Bot, User, ChatAction, InlineKeyboar
 from telegram.ext import CommandHandler, CallbackContext, ConversationHandler, run_async
 
 from sp_bot import dispatcher
-from sp_bot.modules.misc.cook_image import drawImage
+from sp_bot.modules.misc.cook_image import draw_image
 from sp_bot.modules.db import DATABASE
 from sp_bot.modules.misc.request_spotify import SPOTIFY
 
@@ -67,7 +67,7 @@ def nowPlaying(update: Update, context: CallbackContext) -> None:
 
         elif res['currently_playing_type'] == 'track':
             username = is_user["username"]
-            image = drawImage(res, username, pfp)
+            image = draw_image(res, username, pfp)
             button = InlineKeyboardButton(
                 text="Play on Spotify", url=res['item']['external_urls']['spotify'])
 

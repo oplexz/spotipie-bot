@@ -16,11 +16,11 @@ def truncate(text, font, limit):
         return (text.strip())
 
 
-def checkUnicode(text):
+def check_unicode(text):
     return text == str(text.encode('utf-8'))[2:-1]
 
 
-def drawImage(res, username, pfp):
+def draw_image(res, username, pfp):
     songname = res['item']['name']
     albumname = res['item']['album']['name']
     totaltime = res['item']['duration_ms']
