@@ -1,5 +1,5 @@
 from telegram import Update
-from telegram.ext import Updater, CallbackContext, CommandHandler, ConversationHandler
+from telegram.ext import CallbackContext, CommandHandler, ConversationHandler
 
 from sp_bot import dispatcher
 from sp_bot.modules.db import DATABASE

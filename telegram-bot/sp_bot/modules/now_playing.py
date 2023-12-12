@@ -1,6 +1,6 @@
 import requests
 
-from telegram import Message, Chat, Update, Bot, User, ChatAction, InlineKeyboardMarkup, InlineKeyboardButton
+from telegram import Update, ChatAction, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.ext import CommandHandler, CallbackContext, ConversationHandler, run_async
 
 from sp_bot import dispatcher

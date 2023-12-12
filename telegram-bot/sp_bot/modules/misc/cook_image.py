@@ -1,6 +1,5 @@
-import math
 import requests
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageFilter
 from io import BytesIO
 
 from sp_bot.modules.misc import Fonts

@@ -1,6 +1,4 @@
 import logging
-import os
-import sys
 import telegram.ext as tg
 from sp_bot.config import Config
 

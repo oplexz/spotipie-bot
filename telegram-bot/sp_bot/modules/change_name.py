@@ -1,5 +1,5 @@
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import Updater, CallbackContext, CommandHandler, ConversationHandler, Filters, MessageHandler
+from telegram.ext import CallbackContext, CommandHandler, ConversationHandler, Filters, MessageHandler
 
 from sp_bot import dispatcher
 from sp_bot.modules.db import DATABASE

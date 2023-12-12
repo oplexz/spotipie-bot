@@ -2,7 +2,7 @@ import requests
 from uuid import uuid4
 
 from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton, InlineQueryResultCachedPhoto
-from telegram.ext import CommandHandler, CallbackContext, ConversationHandler, InlineQueryHandler
+from telegram.ext import CallbackContext, ConversationHandler, InlineQueryHandler
 
 from sp_bot import dispatcher, TEMP_CHANNEL
 from sp_bot.modules.misc.cook_image import draw_image

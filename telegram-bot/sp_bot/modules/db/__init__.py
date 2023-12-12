@@ -1,5 +1,4 @@
 from sp_bot import SESSION
-from bson import ObjectId
 
 
 class MongoOperations:

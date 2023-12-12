@@ -1,15 +1,12 @@
-import re
 import importlib
 from bson.objectid import ObjectId
 
-from telegram import Message, Chat, Update, Bot, User
+from telegram import Update
 from telegram import ParseMode, InlineKeyboardMarkup, InlineKeyboardButton
-from telegram.ext import CommandHandler, Filters, MessageHandler, CallbackQueryHandler, CallbackContext, ConversationHandler
-from telegram.ext.dispatcher import run_async, DispatcherHandlerStop, Dispatcher
-from telegram.utils.helpers import escape_markdown
+from telegram.ext import CommandHandler, CallbackContext, ConversationHandler
 
 from sp_bot.modules import ALL_MODULES
-from sp_bot import dispatcher, updater, LOGGER, TOKEN
+from sp_bot import dispatcher, updater, LOGGER
 from sp_bot.modules.misc.request_spotify import SPOTIFY
 from sp_bot.modules.db import DATABASE
 
