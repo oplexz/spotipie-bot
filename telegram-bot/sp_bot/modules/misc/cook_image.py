@@ -82,6 +82,6 @@ def drawImage(res, username, pfp):
 
     # return canvas
     image = BytesIO()
-    canvas.save(image, 'JPEG', quality=200)
+    canvas.save(image, 'PNG')
     image.seek(0)
     return image
