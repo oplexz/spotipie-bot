@@ -112,10 +112,10 @@ async def start(update: Update, context: CallbackContext):
                     LOGGER.exception(ex)
                     return ConversationHandler.END
 
-        update.effective_message.delete()
+        await update.effective_message.delete()
         return ConversationHandler.END
     else:
-        update.effective_message.reply_text("Hmm?")
+        await update.effective_message.reply_text("Hmm?")
         return ConversationHandler.END
 
 
