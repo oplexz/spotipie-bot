@@ -20,10 +20,8 @@ A fork of [Neel's Spotipie-bot](https://github.com/k-neel/spotipie-bot).
 
 TODO:
 
--   Update .env.example to follow new variables
--   Change image display logic (ideas: blurred cover as background)
+-   Round album cover, user profile picture
 -   Make mongo less verbose
--   Bump Python packages versions
 -   Change Telegram bot messages
 -   Authserver: change BOT_URL to expect bot's username, not t.me/BOTNAME?start=
 -   Documentation
