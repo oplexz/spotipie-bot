@@ -1,5 +1,5 @@
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import CallbackContext, CommandHandler, ConversationHandler
+from telegram.ext import CommandHandler, ConversationHandler
 
 from sp_bot import app, BOT_URL
 from sp_bot.modules.db import DATABASE
@@ -9,7 +9,7 @@ PM_MSG = 'Contact me in pm to /register or /unregister your account.'
 REG_MSG = 'Open the link below, to connect your Spotify account.'
 
 
-async def register(update: Update, context: CallbackContext) -> None:
+async def register(update: Update) -> None:
     'add new user'
     if update.effective_chat.type == update.effective_chat.PRIVATE:
         tg_id = str(update.effective_user.id)
@@ -27,7 +27,7 @@ async def register(update: Update, context: CallbackContext) -> None:
         return ConversationHandler.END
 
 
-async def unRegister(update: Update, context: CallbackContext) -> None:
+async def unRegister(update: Update) -> None:
     'add new user'
     if update.effective_chat.type == update.effective_chat.PRIVATE:
         tg_id = str(update.effective_user.id)

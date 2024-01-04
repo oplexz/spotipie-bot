@@ -100,7 +100,6 @@ def draw_image(res, username, profile_picture):
     total_time = res['item']['duration_ms']
     current_time = res['progress_ms']
     cover_art_url = res['item']['album']['images'][0]['url']
-    song_url = res['item']['external_urls']['spotify']
     artists = ', '.join([x['name'] for x in res['item']['artists']])
 
     # Create a blank canvas

@@ -1,5 +1,5 @@
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import CallbackContext, CommandHandler, ConversationHandler, filters, MessageHandler
+from telegram.ext import CommandHandler, ConversationHandler, filters, MessageHandler
 
 from sp_bot import app, BOT_URL
 from sp_bot.modules.db import DATABASE
@@ -10,7 +10,7 @@ REG_MSG = 'You need to register first. use /register to get started.'
 
 
 # /username command
-async def getUsername(update: Update, context: CallbackContext) -> None:
+async def getUsername(update: Update) -> None:
     'ask user for usename'
     if update.effective_chat.type != update.effective_chat.PRIVATE:
         # TODO: pass "name" to /start
@@ -25,7 +25,7 @@ async def getUsername(update: Update, context: CallbackContext) -> None:
 
 
 # username command state
-async def setUsername(update: Update, context: CallbackContext) -> None:
+async def setUsername(update: Update) -> None:
     'save username in db'
     text = update.effective_message.text.strip()
     if len(text) > 15:

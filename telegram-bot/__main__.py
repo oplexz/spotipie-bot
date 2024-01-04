@@ -52,7 +52,7 @@ for module_name in ALL_MODULES:
 
 
 # /start command
-async def start(update: Update, context: CallbackContext):
+async def start(update: Update):
     if update.effective_chat.type == update.effective_chat.PRIVATE:
         first_name = update.effective_user.first_name
         text = update.effective_message.text
@@ -104,7 +104,7 @@ async def start(update: Update, context: CallbackContext):
                         await update.message.reply_text(
                             "Unable to authenticate. Please try again using /register. If you are having issues using the bot contact in support chat (check bot info)")
                         return ConversationHandler.END
-                    user = DATABASE.addUser(tg_id, refreshToken)
+                    DATABASE.addUser(tg_id, refreshToken)
                     await update.message.reply_text(
                         "Account successfully linked. Now use /name to set a display name then use /now to use the bot.")
                 except Exception as ex:

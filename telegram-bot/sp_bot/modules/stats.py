@@ -1,11 +1,11 @@
 from telegram import Update
-from telegram.ext import CallbackContext, CommandHandler, ConversationHandler
+from telegram.ext import CommandHandler, ConversationHandler
 
 from sp_bot import app
 from sp_bot.modules.db import DATABASE
 
 
-async def statss(update: Update, context: CallbackContext):
+async def statss(update: Update):
     'returns the number of registered users, devs only'
     user = str(update.message.from_user.id)
     if user in ['394012198', '259972454']:
