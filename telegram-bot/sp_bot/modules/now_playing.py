@@ -4,7 +4,7 @@ from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.constants import ChatAction
 from telegram.ext import CommandHandler, CallbackContext, ConversationHandler
 
-from sp_bot import app
+from sp_bot import app, BOT_URL
 from sp_bot.modules.misc.cook_image import draw_image
 from sp_bot.modules.db import DATABASE
 from sp_bot.modules.misc.request_spotify import SPOTIFY, InvalidGrantError
@@ -16,7 +16,6 @@ TOKEN_ERR_MSG = '''
 Your spotify account is not properly linked with bot :( 
 please use /unregister command in pm and /register again.
 '''
-BOT_URL = 't.me/{}'
 
 
 async def nowPlaying(update: Update, context: CallbackContext) -> None:
@@ -27,21 +26,24 @@ async def nowPlaying(update: Update, context: CallbackContext) -> None:
         tg_id = str(update.message.from_user.id)
         is_user = DATABASE.fetchData(tg_id)
         if is_user == None:
+            # TODO: pass "register" to /start
             button = InlineKeyboardMarkup(
-                [[InlineKeyboardButton(text='Contact in pm', url=BOT_URL.format(context.bot.username))]])
+                [[InlineKeyboardButton(text='Register', url=BOT_URL)]])
             await update.effective_message.reply_text(REG_MSG, reply_markup=button)
 
             return ConversationHandler.END
         elif is_user["username"] == 'User':
+            # TODO: pass "name" to /start
             button = InlineKeyboardMarkup(
-                [[InlineKeyboardButton(text='Contact in pm', url=BOT_URL.format(context.bot.username))]])
+                [[InlineKeyboardButton(text='Set username', url=BOT_URL)]])
             await update.effective_message.reply_text(
                 USR_NAME_MSG, reply_markup=button)
 
             return ConversationHandler.END
         elif is_user["token"] == '00000':
+            # TODO: pass "register" to /start
             button = InlineKeyboardMarkup(
-                [[InlineKeyboardButton(text='Contact in pm', url=BOT_URL.format(context.bot.username))]])
+                [[InlineKeyboardButton(text='Link account', url=BOT_URL)]])
             await update.effective_message.reply_text(
                 TOKEN_ERR_MSG, reply_markup=button)
 

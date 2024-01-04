@@ -1,11 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import { Code } from "../models/auth";
-import { BOT_URL } from "../util/secrets";
+import { BOT_USERNAME } from "../util/secrets";
 import logger from "../util/logging";
 
 export const callbackRoute = async (req: Request, res: Response, next: NextFunction) => {
-    const botUrl = BOT_URL;
-    let url: string;
     try {
         if (req.query.error) return res.send("Cancelled");
         const userIp = req.connection.remoteAddress;
@@ -23,11 +21,9 @@ export const callbackRoute = async (req: Request, res: Response, next: NextFunct
                 ip: userIp,
             });
             await code.save();
-            url = `${botUrl}${code._id}`;
-            res.redirect(`https://${url}`);
+            res.redirect(`https://t.me/${BOT_USERNAME}?start=${code._id}`);
         } else {
-            url = `${botUrl}${code._id}`;
-            res.redirect(`https://${url}`);
+            res.redirect(`https://t.me/${BOT_USERNAME}?start=${code._id}`);
         }
     } catch (err: any) {
         logger.log({

@@ -1,4 +1,5 @@
 import logging
+import os
 from telegram.ext import ApplicationBuilder
 from sp_bot.config import Config
 
@@ -25,6 +26,8 @@ MONGO_PASSWORD = Config.MONGO_PASSWORD
 MONGO_DB = Config.MONGO_DB
 
 TEMP_CHANNEL = Config.TEMP_CHANNEL
+
+BOT_URL = f't.me/{os.environ.get("BOT_USERNAME")}'
 
 app = ApplicationBuilder().token(TOKEN).build()
 

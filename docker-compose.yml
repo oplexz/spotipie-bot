@@ -30,7 +30,7 @@ services:
             - MONGO_USER=${MONGO_SPOTIPIE_USER}
             - MONGO_PASSWORD=${MONGO_SPOTIPIE_PASSWORD}
             - MONGO_DB=${MONGO_SPOTIPIE_DB}
-            - BOT_URL=${BOT_URL}
+            - BOT_USERNAME=${BOT_USERNAME}
         ports:
             - 6969:6969
         depends_on:

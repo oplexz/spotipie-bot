@@ -1,21 +1,21 @@
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import CallbackContext, CommandHandler, ConversationHandler, filters, MessageHandler
 
-from sp_bot import app
+from sp_bot import app, BOT_URL
 from sp_bot.modules.db import DATABASE
 
 
 PM_MSG = 'Contact me in pm to change your username.'
 REG_MSG = 'You need to register first. use /register to get started.'
-BOT_URL = 't.me/{}'
 
 
 # /username command
 async def getUsername(update: Update, context: CallbackContext) -> None:
     'ask user for usename'
     if update.effective_chat.type != update.effective_chat.PRIVATE:
+        # TODO: pass "name" to /start
         button = InlineKeyboardMarkup(
-            [[InlineKeyboardButton(text="Change username", url=BOT_URL.format(context.bot.username))]])
+            [[InlineKeyboardButton(text="Change username", url=BOT_URL)]])
         await update.effective_message.reply_text(
             PM_MSG, reply_markup=button)
         return ConversationHandler.END

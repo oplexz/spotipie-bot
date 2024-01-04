@@ -21,8 +21,8 @@ if (!MONGO_PASSWORD) {
 }
 
 export const MONGODB_URI = `mongodb://${MONGO_USER}:${MONGO_PASSWORD}@mongo:27017/${MONGO_DB}`;
-export const BOT_URL = process.env["BOT_URL"];
+export const BOT_USERNAME = process.env["BOT_USERNAME"];
 
-if (!BOT_URL) {
-    console.log("No client secret. Set SESSION_SECRET environment variable.");
+if (!BOT_USERNAME) {
+    console.log("No bot username. Set BOT_USERNAME environment variable.");
 }
