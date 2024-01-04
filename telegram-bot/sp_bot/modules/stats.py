@@ -9,7 +9,7 @@ async def statss(update: Update, context: CallbackContext):
     'returns the number of registered users, devs only'
     user = str(update.message.from_user.id)
     if user in ['394012198', '259972454']:
-        total_users = DATABASE.countAll()
+        total_users = DATABASE.count_all()
         await update.message.reply_text(f'{total_users} Users')
     else:
         await update.effective_message.reply_text(

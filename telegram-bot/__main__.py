@@ -79,8 +79,8 @@ async def start(update: Update, context: CallbackContext):
         else:
             _id = text[7:]
             try:
-                codeObject = DATABASE.fetchCode(ObjectId(_id))
-                _ = DATABASE.deleteCode(ObjectId(_id))
+                codeObject = DATABASE.fetch_code(ObjectId(_id))
+                _ = DATABASE.delete_code(ObjectId(_id))
             except Exception as ex:
                 await update.message.reply_text(
                     "Please use /register command to initiate the login process.")
@@ -93,7 +93,7 @@ async def start(update: Update, context: CallbackContext):
             else:
                 try:
                     tg_id = str(update.effective_user.id)
-                    is_user = DATABASE.fetchData(tg_id)
+                    is_user = DATABASE.fetch_user_data(tg_id)
                     if is_user != None:
                         await update.message.reply_text(
                             "You are already registered. If the bot is not working /unregister and /register again.")
@@ -104,7 +104,7 @@ async def start(update: Update, context: CallbackContext):
                         await update.message.reply_text(
                             "Unable to authenticate. Please try again using /register. If you are having issues using the bot contact in support chat (check bot info)")
                         return ConversationHandler.END
-                    DATABASE.addUser(tg_id, refreshToken)
+                    DATABASE.add_user(tg_id, refreshToken)
                     await update.message.reply_text(
                         "Account successfully linked. Now use /name to set a display name then use /now to use the bot.")
                 except Exception as ex:

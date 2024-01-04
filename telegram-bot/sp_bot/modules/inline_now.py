@@ -15,7 +15,7 @@ async def inlineNowPlaying(update: Update, context: CallbackContext):
     'inline implementation of nowPlaying() function along with exception handeling for new users'
     try:
         tg_id = str(update.inline_query.from_user.id)
-        is_user = DATABASE.fetchData(tg_id)
+        is_user = DATABASE.fetch_user_data(tg_id)
         if is_user == None:
             await update.inline_query.answer(
                 [

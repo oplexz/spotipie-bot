@@ -24,7 +24,7 @@ async def nowPlaying(update: Update, context: CallbackContext) -> None:
 
     try:
         tg_id = str(update.message.from_user.id)
-        is_user = DATABASE.fetchData(tg_id)
+        is_user = DATABASE.fetch_user_data(tg_id)
         if is_user == None:
             # TODO: pass "register" to /start
             button = InlineKeyboardMarkup(

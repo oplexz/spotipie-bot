@@ -24,7 +24,7 @@ class SpotifyUser:
             '&scope=user-read-currently-playing'
         return authorization_redirect_url
 
-    def getAccessToken(self, authCode):
+    def getAccessToken(self, authCode: str):
         data = {'grant_type': 'authorization_code',
                 'code': authCode, 'redirect_uri': self.redirect_uri}
         r = requests.post(
@@ -36,7 +36,7 @@ class SpotifyUser:
         else:
             return 'error'
 
-    def getCurrentlyPlayingSong(self, refreshToken):
+    def getCurrentlyPlayingSong(self, refreshToken: str):
         data = {
             'grant_type': 'refresh_token',
             'refresh_token': refreshToken,

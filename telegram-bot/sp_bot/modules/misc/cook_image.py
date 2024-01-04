@@ -19,7 +19,7 @@ FONT_ARIAL = ImageFont.truetype(Fonts.ARIAL, 50)
 FONT_ARIAL_SMALLER = ImageFont.truetype(Fonts.ARIAL, 46)
 
 
-def truncate(text, font, limit):
+def truncate(text: str, font: ImageFont, limit: int):
     edited = True if font.getbbox(text)[2] > limit else False
     while font.getbbox(text)[2] > limit:
         text = text[:-1]
@@ -29,11 +29,11 @@ def truncate(text, font, limit):
         return (text.strip())
 
 
-def check_unicode(text):
+def check_unicode(text: str):
     return text == str(text.encode('utf-8'))[2:-1]
 
 
-def draw_album_art(canvas, cover_art_url):
+def draw_album_art(canvas: Image, cover_art_url: str):
     try:
         response = requests.get(cover_art_url)
         album_art = Image.open(BytesIO(response.content))
@@ -50,13 +50,13 @@ def draw_album_art(canvas, cover_art_url):
         print(ex)
 
 
-def draw_profile_picture(canvas, profile_picture):
+def draw_profile_picture(canvas: Image, profile_picture):
     profile_pic = Image.open(BytesIO(profile_picture.content))
     canvas.paste(
         profile_pic, (CARD_SIZE[0] - EDGE_GAP - PROFILE_PIC_SIZE, EDGE_GAP))
 
 
-def draw_text_on_canvas(draw: ImageDraw, username, song_name, artists, album_name):
+def draw_text_on_canvas(draw: ImageDraw, username: str, song_name: str, artists: str, album_name: str):
     fill_color = '#ffffff'
 
     username = truncate(username, FONT_POPPINS, 500)
@@ -79,7 +79,7 @@ def draw_text_on_canvas(draw: ImageDraw, username, song_name, artists, album_nam
               font=FONT_OPEN_SANS if check_unicode(album_name) else FONT_ARIAL_SMALLER)
 
 
-def draw_progress_bar(draw, current_time, total_time):
+def draw_progress_bar(draw: ImageDraw, current_time: int, total_time: int):
     progress_bar_width = CARD_SIZE[0] - INFO_OFFSET - EDGE_GAP
     progress_bar_height = 4
     progress_bar_x1 = INFO_OFFSET
@@ -94,7 +94,7 @@ def draw_progress_bar(draw, current_time, total_time):
                    (progress_bar_x2, progress_bar_y2)], fill='#B3B3B3')
 
 
-def draw_image(res, username, profile_picture):
+def draw_image(res: dict, username: str, profile_picture: requests.models.Response | str):
     song_name = res['item']['name']
     album_name = res['item']['album']['name']
     total_time = res['item']['duration_ms']

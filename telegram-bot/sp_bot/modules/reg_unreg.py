@@ -32,13 +32,13 @@ async def unregister(update: Update, context: CallbackContext) -> None:
     if update.effective_chat.type == update.effective_chat.PRIVATE:
         tg_id = str(update.effective_user.id)
         try:
-            is_user = DATABASE.fetchData(tg_id)
+            is_user = DATABASE.fetch_user_data(tg_id)
             if is_user == None:
                 await update.message.reply_text(
                     "You haven't registered your account yet.")
                 return ConversationHandler.END
             else:
-                DATABASE.deleteData(tg_id)
+                DATABASE.delete_data(tg_id)
                 await update.message.reply_text("Account successfully removed.")
                 return ConversationHandler.END
 
@@ -56,7 +56,7 @@ async def unregister(update: Update, context: CallbackContext) -> None:
 
 
 REGISTER_HANDLER = CommandHandler("register", register)
-UNREGISTER_HANDLER = CommandHandler("unregister", unRegister)
+UNREGISTER_HANDLER = CommandHandler("unregister", unregister)
 
 app.add_handler(REGISTER_HANDLER)
 app.add_handler(UNREGISTER_HANDLER)
