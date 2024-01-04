@@ -53,7 +53,7 @@ class SpotifyUser:
                 if token['error'] == 'invalid_grant':
                     raise InvalidGrantError(token['error_description'])
                 else:
-                    raise ValueError(
+                    raise Exception(
                         f"{token['error']}: {token['error_description']}")
 
             if 'access_token' in token:
@@ -67,7 +67,7 @@ class SpotifyUser:
                 r.raise_for_status()
                 return r
             else:
-                raise ValueError('access_token is not defined')
+                raise Exception('access_token is not defined')
         except InvalidGrantError:
             raise
         except:
