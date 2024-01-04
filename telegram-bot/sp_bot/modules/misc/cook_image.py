@@ -1,9 +1,9 @@
-import requests
-from PIL import Image, ImageDraw, ImageFont, ImageFilter
 from io import BytesIO
 
+import requests
+from PIL import Image, ImageDraw, ImageFilter, ImageFont, ImageOps
+
 from sp_bot.modules.misc import Fonts
-from PIL import ImageOps
 
 # Define constants
 CARD_SIZE = (1280, 480)

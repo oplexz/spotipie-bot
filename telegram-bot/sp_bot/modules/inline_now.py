@@ -1,14 +1,16 @@
-import requests
 from uuid import uuid4
 
-from telegram import InputTextMessageContent, Update, InlineKeyboardMarkup, InlineKeyboardButton, InlineQueryResultPhoto, InlineQueryResultArticle
-from telegram.ext import CallbackContext, ConversationHandler, InlineQueryHandler
+import requests
+from telegram import (InlineKeyboardButton, InlineKeyboardMarkup,
+                      InlineQueryResultArticle, InlineQueryResultPhoto,
+                      InputTextMessageContent, Update)
+from telegram.ext import (CallbackContext, ConversationHandler,
+                          InlineQueryHandler)
 
-from sp_bot import app, TEMP_CHANNEL, BOT_URL
-from sp_bot.modules.misc.cook_image import draw_image
+from sp_bot import BOT_URL, TEMP_CHANNEL, app
 from sp_bot.modules.db import DATABASE
+from sp_bot.modules.misc.cook_image import draw_image
 from sp_bot.modules.misc.request_spotify import SPOTIFY, InvalidGrantError
-from telegram import InlineQueryResultArticle
 
 
 async def inlineNowPlaying(update: Update, context: CallbackContext):

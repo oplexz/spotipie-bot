@@ -1,14 +1,14 @@
-import requests
-
-from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
-from telegram.constants import ChatAction
-from telegram.ext import CommandHandler, CallbackContext, ConversationHandler
-
-from sp_bot import app, BOT_URL
-from sp_bot.modules.misc.cook_image import draw_image
-from sp_bot.modules.db import DATABASE
-from sp_bot.modules.misc.request_spotify import SPOTIFY, InvalidGrantError
 import logging
+
+import requests
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram.constants import ChatAction
+from telegram.ext import CallbackContext, CommandHandler, ConversationHandler
+
+from sp_bot import BOT_URL, app
+from sp_bot.modules.db import DATABASE
+from sp_bot.modules.misc.cook_image import draw_image
+from sp_bot.modules.misc.request_spotify import SPOTIFY, InvalidGrantError
 
 REG_MSG = 'You need to connect your Spotify account first. Contact me in pm and use /register command.'
 USR_NAME_MSG = 'You need to add a username to start using the bot. Contact me in pm and use /name command.'

@@ -1,7 +1,8 @@
 # >///<
-from sp_bot import LOGGER
-from os.path import dirname, basename, isfile
 import glob
+from os.path import basename, dirname, isfile
+
+from sp_bot import LOGGER
 
 
 def __list_all_modules():

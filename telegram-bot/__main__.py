@@ -1,15 +1,14 @@
 import importlib
+
 from bson.objectid import ObjectId
-
-from telegram import Update
-from telegram import InlineKeyboardMarkup, InlineKeyboardButton
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.constants import ParseMode
-from telegram.ext import CommandHandler, CallbackContext, ConversationHandler
+from telegram.ext import CallbackContext, CommandHandler, ConversationHandler
 
+from sp_bot import LOGGER, app
 from sp_bot.modules import ALL_MODULES
-from sp_bot import app, LOGGER
-from sp_bot.modules.misc.request_spotify import SPOTIFY
 from sp_bot.modules.db import DATABASE
+from sp_bot.modules.misc.request_spotify import SPOTIFY
 
 START_TEXT = '''
 Hi {},

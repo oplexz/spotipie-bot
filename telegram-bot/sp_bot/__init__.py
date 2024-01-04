@@ -1,8 +1,9 @@
 import logging
-from telegram.ext import ApplicationBuilder
-from sp_bot.config import Config
 
 from pymongo import MongoClient
+from telegram.ext import ApplicationBuilder
+
+from sp_bot.config import Config
 
 # enable logging
 logging.basicConfig(

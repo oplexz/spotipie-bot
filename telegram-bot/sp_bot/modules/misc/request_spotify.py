@@ -1,6 +1,8 @@
-import logging
-import requests
 import json
+import logging
+
+import requests
+
 from sp_bot import CLIENT_ID, CLIENT_SECRET, REDIRECT_URI
 
 
