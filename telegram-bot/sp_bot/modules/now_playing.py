@@ -19,7 +19,7 @@ BOT_URL = 't.me/{}'
 
 
 async def nowPlaying(update: Update, context: CallbackContext) -> None:
-    """Sends currently playing song when command /noww is issued."""
+    """Sends currently playing song when command /now is issued."""
     await context.bot.sendChatAction(update.message.chat_id, ChatAction.TYPING)
 
     try:
