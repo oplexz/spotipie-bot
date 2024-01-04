@@ -4,10 +4,10 @@ from uuid import uuid4
 from telegram import InputTextMessageContent, Update, InlineKeyboardMarkup, InlineKeyboardButton, InlineQueryResultPhoto, InlineQueryResultArticle
 from telegram.ext import CallbackContext, ConversationHandler, InlineQueryHandler
 
-from sp_bot import app, TEMP_CHANNEL
+from sp_bot import app, TEMP_CHANNEL, BOT_URL
 from sp_bot.modules.misc.cook_image import draw_image
 from sp_bot.modules.db import DATABASE
-from sp_bot.modules.misc.request_spotify import SPOTIFY
+from sp_bot.modules.misc.request_spotify import SPOTIFY, InvalidGrantError
 from telegram import InlineQueryResultArticle
 
 
@@ -63,7 +63,26 @@ async def inlineNowPlaying(update: Update, context: CallbackContext):
             return ConversationHandler.END
         else:
             token = is_user["token"]
-            r = SPOTIFY.getCurrentlyPlayingSong(token)
+
+            try:
+                r = SPOTIFY.getCurrentlyPlayingSong(token)
+            except InvalidGrantError:
+                await update.inline_query.answer(
+                    [
+                        InlineQueryResultArticle(
+                            id=uuid4(),
+                            title="Your Spotify session has expired. Please log in again.",
+                            input_message_content=InputTextMessageContent(
+                                "Your Spotify session has expired. Please log in again."),
+                            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(
+                                "Login", url=BOT_URL)]])
+                        )
+                    ],
+                    cache_time=0
+                )
+                return
+            except Exception as e:
+                print(f"An error occurred: {str(e)}")
     except Exception as ex:
         print(ex)
         return
