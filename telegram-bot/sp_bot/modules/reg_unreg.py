@@ -5,12 +5,16 @@ from sp_bot import BOT_URL, app
 from sp_bot.modules.db import DATABASE
 from sp_bot.modules.misc.request_spotify import SPOTIFY
 
-PM_MSG = 'Contact me in pm to /register or /unregister your account.'
-REG_MSG = 'Open the link below, to connect your Spotify account.'
+PM_MSG = "Contact me in PM to /register or /unregister your account."
+REG_MSG = "Open the link below to connect your Spotify account."
 
 
 async def register(update: Update, context: CallbackContext) -> None:
-    'add new user'
+    """
+    The /register command handler.
+
+    Registers the user by adding the user's data to the database.
+    """
     if update.effective_chat.type == update.effective_chat.PRIVATE:
         tg_id = str(update.effective_user.id)
         button = InlineKeyboardMarkup(
@@ -28,7 +32,11 @@ async def register(update: Update, context: CallbackContext) -> None:
 
 
 async def unregister(update: Update, context: CallbackContext) -> None:
-    """Unregisters the user by deleting the user's data from the database."""
+    """
+    The /unregister command handler.
+
+    Unregisters the user by deleting the user's data from the database.
+    """
     if update.effective_chat.type == update.effective_chat.PRIVATE:
         tg_id = str(update.effective_user.id)
         try:
@@ -44,7 +52,7 @@ async def unregister(update: Update, context: CallbackContext) -> None:
 
         except Exception as ex:
             print(ex)
-            await update.effective_message.reply_text("Database Error.")
+            await update.effective_message.reply_text("Oops! Something went wrong. Please try again later.")
             return ConversationHandler.END
     else:
         # TODO: pass "unregister" to /start
@@ -55,8 +63,8 @@ async def unregister(update: Update, context: CallbackContext) -> None:
         return ConversationHandler.END
 
 
-REGISTER_HANDLER = CommandHandler("register", register)
-UNREGISTER_HANDLER = CommandHandler("unregister", unregister)
+REGISTER_HANDLER = CommandHandler('register', register)
+UNREGISTER_HANDLER = CommandHandler('unregister', unregister)
 
 app.add_handler(REGISTER_HANDLER)
 app.add_handler(UNREGISTER_HANDLER)

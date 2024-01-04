@@ -14,7 +14,11 @@ from sp_bot.modules.misc.request_spotify import SPOTIFY, InvalidGrantError
 
 
 async def inlineNowPlaying(update: Update, context: CallbackContext):
-    'inline implementation of nowPlaying() function along with exception handeling for new users'
+    """
+    The inline query handler.
+
+    Returns the currently playing song.
+    """
     try:
         tg_id = str(update.inline_query.from_user.id)
         is_user = DATABASE.fetch_user_data(tg_id)
@@ -33,16 +37,16 @@ async def inlineNowPlaying(update: Update, context: CallbackContext):
                 cache_time=0
             )
             return ConversationHandler.END
-        elif is_user["username"] == 'User':
+        elif is_user['username'] == 'User':
             await update.inline_query.answer(
                 [
                     InlineQueryResultArticle(
                         id=uuid4(),
-                        title="Set Username",
+                        title="Set display name",
                         input_message_content=InputTextMessageContent(
-                            "You need to set a username."),
+                            "You need to set a display name first."),
                         reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(
-                            "Set Username", switch_inline_query_current_chat="set_username")]])
+                            "Set display name", switch_inline_query_current_chat="set_username")]])
                     )
                 ],
                 cache_time=0

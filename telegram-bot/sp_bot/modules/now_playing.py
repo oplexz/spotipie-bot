@@ -10,16 +10,20 @@ from sp_bot.modules.db import DATABASE
 from sp_bot.modules.misc.cook_image import draw_image
 from sp_bot.modules.misc.request_spotify import SPOTIFY, InvalidGrantError
 
-REG_MSG = 'You need to connect your Spotify account first. Contact me in pm and use /register command.'
-USR_NAME_MSG = 'You need to add a username to start using the bot. Contact me in pm and use /name command.'
-TOKEN_ERR_MSG = '''
+REG_MSG = "You need to connect your Spotify account first. Contact me in PM and use /register command."
+USR_NAME_MSG = "You need to add a username to start using the bot. Contact me in PM and use /name command."
+TOKEN_ERR_MSG = """
 Your spotify account is not properly linked with bot :( 
-please use /unregister command in pm and /register again.
-'''
+please use /unregister command in PM and /register again.
+"""
 
 
 async def nowPlaying(update: Update, context: CallbackContext) -> None:
-    """Sends currently playing song when command /now is issued."""
+    """
+    The /now command handler.
+
+    Returns the currently playing song.
+    """
     await context.bot.sendChatAction(update.message.chat_id, ChatAction.TYPING)
 
     try:
@@ -32,7 +36,7 @@ async def nowPlaying(update: Update, context: CallbackContext) -> None:
             await update.effective_message.reply_text(REG_MSG, reply_markup=button)
 
             return ConversationHandler.END
-        elif is_user["username"] == 'User':
+        elif is_user['username'] == 'User':
             # TODO: pass "name" to /start
             button = InlineKeyboardMarkup(
                 [[InlineKeyboardButton(text='Set username', url=BOT_URL)]])
@@ -40,7 +44,7 @@ async def nowPlaying(update: Update, context: CallbackContext) -> None:
                 USR_NAME_MSG, reply_markup=button)
 
             return ConversationHandler.END
-        elif is_user["token"] == '00000':
+        elif is_user['token'] == '00000':
             # TODO: pass "register" to /start
             button = InlineKeyboardMarkup(
                 [[InlineKeyboardButton(text='Link account', url=BOT_URL)]])
@@ -49,7 +53,7 @@ async def nowPlaying(update: Update, context: CallbackContext) -> None:
 
             return ConversationHandler.END
         else:
-            token = is_user["token"]
+            token = is_user['token']
 
             try:
                 r = SPOTIFY.getCurrentlyPlayingSong(token)
@@ -96,5 +100,5 @@ async def nowPlaying(update: Update, context: CallbackContext) -> None:
         # await update.message.reply_text("Oops! Something went wrong. Please try again later.")
 
 
-NOW_PLAYING_HANDLER = CommandHandler("now", nowPlaying)
+NOW_PLAYING_HANDLER = CommandHandler('now', nowPlaying)
 app.add_handler(NOW_PLAYING_HANDLER)

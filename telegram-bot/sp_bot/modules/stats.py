@@ -6,7 +6,12 @@ from sp_bot.modules.db import DATABASE
 
 
 async def statss(update: Update, context: CallbackContext):
-    'returns the number of registered users, devs only'
+    """
+    The /statss command handler.
+
+    Returns the number of registered users.
+    """
+    # TODO: check if user is admin instead
     user = str(update.message.from_user.id)
     if user in ['394012198', '259972454']:
         total_users = DATABASE.count_all()
