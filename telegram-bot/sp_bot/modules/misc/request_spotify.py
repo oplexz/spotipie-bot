@@ -1,6 +1,12 @@
+import logging
 import requests
 import json
 from sp_bot import CLIENT_ID, CLIENT_SECRET, REDIRECT_URI
+
+
+class InvalidGrantError(Exception):
+    """Raised when Spotify returns "invalid_grant" error"""
+    pass
 
 
 class SpotifyUser:
@@ -38,17 +44,34 @@ class SpotifyUser:
             'client_id': self.client_id,
             'client_secret': self.client_secret
         }
-        token = requests.post(self.token_url, data=data).json()
 
-        headers = {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token['access_token']
-        }
-        r = requests.get(
-            'https://api.spotify.com/v1/me/player/currently-playing', headers=headers)
+        try:
+            token = requests.post(self.token_url, data=data).json()
+            if 'error' in token:
+                if token['error'] == 'invalid_grant':
+                    raise InvalidGrantError(token['error_description'])
+                else:
+                    raise ValueError(
+                        f"{token['error']}: {token['error_description']}")
 
-        return r
+            if 'access_token' in token:
+                headers = {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token['access_token']
+                }
+                r = requests.get(
+                    'https://api.spotify.com/v1/me/player/currently-playing', headers=headers)
+                r.raise_for_status()
+                return r
+            else:
+                raise ValueError('access_token is not defined')
+        except InvalidGrantError:
+            raise
+        except:
+            logging.exception(
+                "Something went wrong while making a request to Spotify API. Try ")
+            return None
 
 
 SPOTIFY = SpotifyUser(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI)

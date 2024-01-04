@@ -7,7 +7,7 @@ from telegram.ext import CommandHandler, CallbackContext, ConversationHandler
 from sp_bot import app
 from sp_bot.modules.misc.cook_image import draw_image
 from sp_bot.modules.db import DATABASE
-from sp_bot.modules.misc.request_spotify import SPOTIFY
+from sp_bot.modules.misc.request_spotify import SPOTIFY, InvalidGrantError
 import logging
 
 REG_MSG = 'You need to connect your Spotify account first. Contact me in pm and use /register command.'
@@ -48,10 +48,17 @@ async def nowPlaying(update: Update, context: CallbackContext) -> None:
             return ConversationHandler.END
         else:
             token = is_user["token"]
-            r = SPOTIFY.getCurrentlyPlayingSong(token)
 
-    except Exception as ex:
-        print(ex)
+            try:
+                r = SPOTIFY.getCurrentlyPlayingSong(token)
+            except InvalidGrantError:
+                await update.message.reply_text("Your Spotify session has expired. Please log in again.")
+                return
+            except Exception as e:
+                print(f"An error occurred: {str(e)}")
+    except:
+        logging.exception("Got an error")
+        await update.message.reply_text("Oops! Something went wrong. Please try again later.")
         return
 
     try:
