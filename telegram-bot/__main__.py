@@ -52,7 +52,7 @@ for module_name in ALL_MODULES:
 
 
 # /start command
-async def start(update: Update):
+async def start(update: Update, context: CallbackContext):
     if update.effective_chat.type == update.effective_chat.PRIVATE:
         first_name = update.effective_user.first_name
         text = update.effective_message.text

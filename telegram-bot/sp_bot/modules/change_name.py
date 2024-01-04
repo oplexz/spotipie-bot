@@ -3,6 +3,7 @@ from telegram.ext import CommandHandler, ConversationHandler, filters, MessageHa
 
 from sp_bot import app, BOT_URL
 from sp_bot.modules.db import DATABASE
+from telegram.ext import CallbackContext
 
 
 PM_MSG = 'Contact me in pm to change your username.'
@@ -10,7 +11,7 @@ REG_MSG = 'You need to register first. use /register to get started.'
 
 
 # /username command
-async def getUsername(update: Update) -> None:
+async def getUsername(update: Update, context: CallbackContext) -> None:
     'ask user for usename'
     if update.effective_chat.type != update.effective_chat.PRIVATE:
         # TODO: pass "name" to /start
@@ -25,7 +26,7 @@ async def getUsername(update: Update) -> None:
 
 
 # username command state
-async def setUsername(update: Update) -> None:
+async def setUsername(update: Update, context: CallbackContext) -> None:
     'save username in db'
     text = update.effective_message.text.strip()
     if len(text) > 15:
