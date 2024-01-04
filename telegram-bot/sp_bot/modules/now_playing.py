@@ -8,6 +8,7 @@ from sp_bot import app
 from sp_bot.modules.misc.cook_image import draw_image
 from sp_bot.modules.db import DATABASE
 from sp_bot.modules.misc.request_spotify import SPOTIFY
+import logging
 
 REG_MSG = 'You need to connect your Spotify account first. Contact me in pm and use /register command.'
 USR_NAME_MSG = 'You need to add a username to start using the bot. Contact me in pm and use /name command.'
@@ -78,10 +79,12 @@ async def nowPlaying(update: Update, context: CallbackContext) -> None:
         else:
             response = "Not sure what you're listening to."
             await update.message.reply_text(response)
-    except Exception as ex:
-        print(ex)
-        # update.message.reply_text("You are not listening to anything.") # bs
-        await update.message.reply_text(f"Error: {ex}")
+    except:
+        # The user is most likely not listening to anything, but we never know...
+        # or, well, I haven't really tested it yet...
+        logging.exception("Got an error")
+        update.message.reply_text("You are not listening to anything.")
+        # await update.message.reply_text("Oops! Something went wrong. Please try again later.")
 
 
 NOW_PLAYING_HANDLER = CommandHandler("now", nowPlaying)
