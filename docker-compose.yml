@@ -15,6 +15,7 @@ services:
             - MONGO_DB=${MONGO_SPOTIPIE_DB}
             - TEMP_CHANNEL=${TEMP_CHANNEL}
             - REDIRECT_URI=${REDIRECT_URI}
+            - BOT_USERNAME=${BOT_USERNAME}
         depends_on:
             mongo:
                 condition: service_healthy
