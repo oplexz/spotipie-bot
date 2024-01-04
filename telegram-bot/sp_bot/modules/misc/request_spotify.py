@@ -30,7 +30,7 @@ class SpotifyUser:
         else:
             return 'error'
 
-    def getCurrentyPlayingSong(self, refreshToken):
+    def getCurrentlyPlayingSong(self, refreshToken):
         data = {
             'grant_type': 'refresh_token',
             'refresh_token': refreshToken,

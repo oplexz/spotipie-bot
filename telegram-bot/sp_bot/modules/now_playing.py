@@ -47,7 +47,7 @@ async def nowPlaying(update: Update, context: CallbackContext) -> None:
             return ConversationHandler.END
         else:
             token = is_user["token"]
-            r = SPOTIFY.getCurrentyPlayingSong(token)
+            r = SPOTIFY.getCurrentlyPlayingSong(token)
 
     except Exception as ex:
         print(ex)
