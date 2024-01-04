@@ -2,7 +2,6 @@ import os
 
 
 class Config:
-
     API_KEY = os.getenv('API_KEY')
     SPOTIFY_CLIENT_ID = os.getenv('SPOTIFY_CLIENT_ID')
     SPOTIFY_CLIENT_SECRET = os.getenv('SPOTIFY_CLIENT_SECRET')
