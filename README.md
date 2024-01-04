@@ -16,6 +16,7 @@ A fork of [Neel's Spotipie-bot](https://github.com/k-neel/spotipie-bot).
 | `TEMP_CHANNEL`            | Telegram channel ID for temporary messages |                                                                                                 |
 | `REDIRECT_URI`            | Spotify redirect URI                       | This should contain the link to your authserver, which is defined below                         |
 | `BOT_URL`                 | Telegram bot URL                           | Currently accepts links in `t.me/BOTUSERNAME?start` format (to be replaced with `BOT_USERNAME`) |
+| `BOT_USERNAME`            | Telegram bot username                      |                                                                                                 |
 | `PORT`                    | Express server port                        |                                                                                                 |
 
 TODO:
@@ -23,7 +24,6 @@ TODO:
 -   Round album cover, user profile picture
 -   Make mongo less verbose
 -   Change Telegram bot messages
--   Authserver: change BOT_URL to expect bot's username, not t.me/BOTNAME?start=
 -   Documentation
 -   Specify image versions in docker-compose.yml
 -   Authserver: maybe upgrade to Express 5? Express 4 works just fine though
