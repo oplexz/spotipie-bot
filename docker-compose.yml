@@ -39,7 +39,7 @@ services:
                 condition: service_healthy
 
     mongo:
-        image: bitnami/mongodb:latest
+        image: bitnami/mongodb:7.0
         restart: unless-stopped
         healthcheck:
             test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet

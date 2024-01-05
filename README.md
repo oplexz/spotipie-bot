@@ -22,8 +22,5 @@ A fork of [Neel's Spotipie-bot](https://github.com/k-neel/spotipie-bot).
 TODO:
 
 -   Round album cover, user profile picture
--   Make mongo less verbose
--   Change Telegram bot messages
--   Documentation
--   Specify image versions in docker-compose.yml
+-   Usage documentation
 -   Authserver: maybe upgrade to Express 5? Express 4 works just fine though
