@@ -38,10 +38,10 @@ def draw_album_art(canvas: Image, cover_art_url: str):
         response = requests.get(cover_art_url)
         album_art = Image.open(BytesIO(response.content))
         background = album_art.copy()
-        background = background.convert("RGBA")
+        background = background.convert('RGBA')
         background = ImageOps.fit(background, CARD_SIZE, Image.LANCZOS)
         background = background.filter(ImageFilter.GaussianBlur(10))
-        dimmed_background = Image.new("RGBA", CARD_SIZE, (0, 0, 0, 128))
+        dimmed_background = Image.new('RGBA', CARD_SIZE, (0, 0, 0, 128))
         canvas.paste(background, (0, 0), mask=dimmed_background)
 
         album_art.thumbnail((THUMBNAIL_SIZE, THUMBNAIL_SIZE), Image.LANCZOS)
@@ -56,7 +56,8 @@ def draw_profile_picture(canvas: Image, profile_picture):
         profile_pic, (CARD_SIZE[0] - EDGE_GAP - PROFILE_PIC_SIZE, EDGE_GAP))
 
 
-def draw_text_on_canvas(draw: ImageDraw, username: str, song_name: str, artists: str, album_name: str):
+def draw_text_on_canvas(draw: ImageDraw, username: str,
+                        song_name: str, artists: str, album_name: str):
     fill_color = '#ffffff'
 
     username = truncate(username, FONT_POPPINS, 500)
@@ -75,8 +76,12 @@ def draw_text_on_canvas(draw: ImageDraw, username: str, song_name: str, artists:
               font=FONT_POPPINS if check_unicode(song_name) else FONT_ARIAL)
     draw.text((INFO_OFFSET, 300), artists, fill=fill_color,
               font=FONT_OPEN_SANS if check_unicode(artists) else FONT_ARIAL_SMALLER)
-    draw.text((INFO_OFFSET, 360), album_name, fill=fill_color,
-              font=FONT_OPEN_SANS if check_unicode(album_name) else FONT_ARIAL_SMALLER)
+    draw.text(
+        (INFO_OFFSET,
+         360),
+        album_name,
+        fill=fill_color,
+        font=FONT_OPEN_SANS if check_unicode(album_name) else FONT_ARIAL_SMALLER)
 
 
 def draw_progress_bar(draw: ImageDraw, current_time: int, total_time: int):
@@ -88,13 +93,14 @@ def draw_progress_bar(draw: ImageDraw, current_time: int, total_time: int):
         (current_time / total_time * progress_bar_width)
     progress_bar_y2 = progress_bar_y1 + progress_bar_height
 
-    draw.rectangle([(progress_bar_x1, progress_bar_y1), (INFO_OFFSET + progress_bar_width, progress_bar_y2)],
-                   fill='#404040')
+    draw.rectangle([(progress_bar_x1, progress_bar_y1), (INFO_OFFSET +
+                   progress_bar_width, progress_bar_y2)], fill='#404040')
     draw.rectangle([(progress_bar_x1, progress_bar_y1),
                    (progress_bar_x2, progress_bar_y2)], fill='#B3B3B3')
 
 
-def draw_image(res: dict, username: str, profile_picture: requests.models.Response | str):
+def draw_image(res: dict, username: str,
+               profile_picture: requests.models.Response | str):
     song_name = res['item']['name']
     album_name = res['item']['album']['name']
     total_time = res['item']['duration_ms']
@@ -103,7 +109,7 @@ def draw_image(res: dict, username: str, profile_picture: requests.models.Respon
     artists = ', '.join([x['name'] for x in res['item']['artists']])
 
     # Create a blank canvas
-    canvas = Image.new("RGB", CARD_SIZE, (18, 18, 18))
+    canvas = Image.new('RGB', CARD_SIZE, (18, 18, 18))
     draw = ImageDraw.Draw(canvas)
 
     draw_album_art(canvas, cover_art_url)

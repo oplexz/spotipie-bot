@@ -22,7 +22,7 @@ async def inlineNowPlaying(update: Update, context: CallbackContext):
     try:
         tg_id = str(update.inline_query.from_user.id)
         is_user = DATABASE.fetch_user_data(tg_id)
-        if is_user == None:
+        if is_user is None:
             await update.inline_query.answer(
                 [
                     InlineQueryResultArticle(
@@ -31,7 +31,7 @@ async def inlineNowPlaying(update: Update, context: CallbackContext):
                         input_message_content=InputTextMessageContent(
                             "You need to register first."),
                         reply_markup=InlineKeyboardMarkup(
-                            [[InlineKeyboardButton("Register", switch_inline_query_current_chat="register")]])
+                            [[InlineKeyboardButton("Register", switch_inline_query_current_chat='register')]])
                     )
                 ],
                 cache_time=0
@@ -46,7 +46,7 @@ async def inlineNowPlaying(update: Update, context: CallbackContext):
                         input_message_content=InputTextMessageContent(
                             "You need to set a display name first."),
                         reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(
-                            "Set display name", switch_inline_query_current_chat="set_username")]])
+                            "Set display name", switch_inline_query_current_chat='set_username')]])
                     )
                 ],
                 cache_time=0
@@ -61,14 +61,14 @@ async def inlineNowPlaying(update: Update, context: CallbackContext):
                         input_message_content=InputTextMessageContent(
                             "Registration error, please click here to fix."),
                         reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(
-                            "Fix Registration", switch_inline_query_current_chat="fix_registration")]])
+                            "Fix Registration", switch_inline_query_current_chat='fix_registration')]])
                     )
                 ],
                 cache_time=0
             )
             return ConversationHandler.END
         else:
-            token = is_user["token"]
+            token = is_user['token']
 
             try:
                 r = SPOTIFY.getCurrentlyPlayingSong(token)
@@ -98,7 +98,7 @@ async def inlineNowPlaying(update: Update, context: CallbackContext):
         pfp_url = photos['photos'][0][0]['file_id']
         file = await context.bot.getFile(pfp_url)
         pfp = requests.get(file.file_path)
-    except:
+    except BaseException:
         pfp = 'https://files.catbox.moe/eb9roq.png'
 
     try:
@@ -119,7 +119,8 @@ async def inlineNowPlaying(update: Update, context: CallbackContext):
             username = is_user["username"]
             image = draw_image(res, username, pfp)
             button = InlineKeyboardButton(
-                text="Play on Spotify", url=res['item']['external_urls']['spotify'])
+                text="Play on Spotify",
+                url=res['item']['external_urls']['spotify'])
             temp = await context.bot.send_photo(TEMP_CHANNEL, photo=image)
             photo = temp['photo'][1]['file_id']
             await temp.delete()

@@ -5,7 +5,7 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.constants import ParseMode
 from telegram.ext import CallbackContext, CommandHandler, ConversationHandler
 
-from sp_bot import LOGGER, app
+from sp_bot import BOT_URL, LOGGER, app
 from sp_bot.modules import ALL_MODULES
 from sp_bot.modules.db import DATABASE
 from sp_bot.modules.misc.request_spotify import SPOTIFY
@@ -60,8 +60,7 @@ async def start(update: Update, context: CallbackContext):
             await update.effective_message.reply_text(
                 START_TEXT.format(first_name), parse_mode=ParseMode.MARKDOWN)
         elif text.endswith('register'):
-            await update.message.reply_text(
-                "Use /register to connect your Spotify account.")
+            await update.message.reply_text("Use /register to connect your Spotify account.")
         elif text.endswith('username'):
             await update.message.reply_text(
                 "Use /name to change your display name.")
@@ -96,21 +95,20 @@ async def start(update: Update, context: CallbackContext):
                     telegram_name = f"{update.effective_user.first_name} {update.effective_user.last_name}" if update.effective_user.last_name else update.effective_user.first_name
 
                     is_user = DATABASE.fetch_user_data(tg_id)
-                    if is_user != None:
+                    if is_user is not None:
                         await update.message.reply_text(
                             "You are already registered.\n\nIf you're having issues, try unlinking your account using /unregister, and using /register again.")
                         return ConversationHandler.END
                     authcode = codeObject["authCode"]
                     refreshToken = SPOTIFY.getAccessToken(authcode)
                     if refreshToken == 'error':
-                        await update.message.reply_text(
-                            "Unable to authenticate. Please try /register again. If you're having issues using the bot, contact the developer.")
+                        await update.message.reply_text("Unable to authenticate. Please try /register again. If you're having issues using the bot, contact the developer.")
                         return ConversationHandler.END
                     DATABASE.add_user(name=telegram_name,
                                       telegram_id=tg_id, token=refreshToken)
                     await update.message.reply_text(
                         "Account successfully linked. Use /name to set a display name, then use /now to use the bot.")
-                except:
+                except BaseException:
                     LOGGER.exception(
                         "An exception occurred in start command handler")
                     await update.message.reply_text("Oops! Something went wrong. Please try again later.")
@@ -127,16 +125,11 @@ async def start(update: Update, context: CallbackContext):
 async def help(update: Update, context: CallbackContext):
     """The /help command handler."""
     if update.effective_chat.type != update.effective_chat.PRIVATE:
-        await update.effective_message.reply_text("Contact me in PM to get the list of possible commands.",
-                                                  reply_markup=InlineKeyboardMarkup(
-                                                      [[InlineKeyboardButton(text="Help",
-                                                                             url="t.me/{}?start=help".format(
-                                                                                 context.bot.username))]]))
+        await update.effective_message.reply_text("Contact me in PM to get the list of possible commands.", reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(text="Help", url=BOT_URL)]]))
         return
 
     else:
-        await update.effective_message.reply_text(
-            HELP_TEXT, parse_mode=ParseMode.MARKDOWN)
+        await update.effective_message.reply_text(HELP_TEXT, parse_mode=ParseMode.MARKDOWN)
 
 
 # main

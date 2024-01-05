@@ -23,5 +23,5 @@ async def statss(update: Update, context: CallbackContext):
     return ConversationHandler
 
 
-STATS_HANDLER = CommandHandler("statss", statss)
+STATS_HANDLER = CommandHandler('statss', statss)
 app.add_handler(STATS_HANDLER)

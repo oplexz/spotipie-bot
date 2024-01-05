@@ -20,11 +20,9 @@ async def getUsername(update: Update, context: CallbackContext) -> None:
         # TODO: pass "name" to /start
         button = InlineKeyboardMarkup(
             [[InlineKeyboardButton(text="Change display name", url=BOT_URL)]])
-        await update.effective_message.reply_text(
-            PM_MSG, reply_markup=button)
+        await update.effective_message.reply_text(PM_MSG, reply_markup=button)
         return ConversationHandler.END
-    await update.effective_message.reply_text(
-        "What name do you want to use? (max 15 characters)\n\nYou can use /cancel to keep your current name.")
+    await update.effective_message.reply_text("What name do you want to use? (max 15 characters)\n\nYou can use /cancel to keep your current name.")
     return USERNAME
 
 
@@ -46,7 +44,7 @@ async def setUsername(update: Update, context: CallbackContext) -> None:
             tg_id = str(update.message.from_user.id)
             is_user = DATABASE.fetchData(tg_id)
 
-            if is_user == None:
+            if is_user is None:
                 await update.message.reply_text(REG_MSG)
                 return ConversationHandler.END
             else:
@@ -54,7 +52,7 @@ async def setUsername(update: Update, context: CallbackContext) -> None:
                 await update.message.reply_text(f"Username updated to {text}")
                 return ConversationHandler.END
 
-        except:
+        except BaseException:
             logging.exception("An exception occurred in setUsername")
             await update.message.reply_text("Oops! Something went wrong. Please try again later.")
             return ConversationHandler.END
@@ -67,9 +65,9 @@ async def cancel(update: Update, context: CallbackContext):
 
 USERNAME = 1
 USERNAME_HANDLER = ConversationHandler(
-    entry_points=[CommandHandler("name", getUsername)],
+    entry_points=[CommandHandler('name', getUsername)],
     states={USERNAME: [MessageHandler(
             filters.TEXT & ~filters.COMMAND, setUsername)]},
-    fallbacks=[CommandHandler("cancel", cancel)])
+    fallbacks=[CommandHandler('cancel', cancel)])
 
 app.add_handler(USERNAME_HANDLER)

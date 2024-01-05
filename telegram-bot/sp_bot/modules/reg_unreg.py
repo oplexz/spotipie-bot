@@ -41,7 +41,7 @@ async def unregister(update: Update, context: CallbackContext) -> None:
         tg_id = str(update.effective_user.id)
         try:
             is_user = DATABASE.fetch_user_data(tg_id)
-            if is_user == None:
+            if is_user is None:
                 await update.message.reply_text(
                     "You haven't registered your account yet.")
                 return ConversationHandler.END

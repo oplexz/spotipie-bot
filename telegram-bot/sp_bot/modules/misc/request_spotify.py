@@ -12,8 +12,8 @@ class InvalidGrantError(Exception):
 
 
 class SpotifyUser:
-    authorize_url = "https://accounts.spotify.com/authorize"
-    token_url = "https://accounts.spotify.com/api/token"
+    authorize_url = 'https://accounts.spotify.com/authorize'
+    token_url = 'https://accounts.spotify.com/api/token'
 
     def __init__(self, client_id, client_secret, redirect_uri):
         self.client_id = client_id
@@ -30,7 +30,12 @@ class SpotifyUser:
         data = {'grant_type': 'authorization_code',
                 'code': authCode, 'redirect_uri': self.redirect_uri}
         r = requests.post(
-            self.token_url, data=data, allow_redirects=True, auth=(self.client_id, self.client_secret))
+            self.token_url,
+            data=data,
+            allow_redirects=True,
+            auth=(
+                self.client_id,
+                self.client_secret))
 
         if r.status_code in range(200, 299):
             res = json.loads(r.text)
@@ -63,16 +68,17 @@ class SpotifyUser:
                     'Authorization': 'Bearer ' + token['access_token']
                 }
                 r = requests.get(
-                    'https://api.spotify.com/v1/me/player/currently-playing', headers=headers)
+                    'https://api.spotify.com/v1/me/player/currently-playing',
+                    headers=headers)
                 r.raise_for_status()
                 return r
             else:
-                raise Exception('access_token is not defined')
+                raise Exception("access_token is not defined")
         except InvalidGrantError:
             raise
-        except:
+        except BaseException:
             logging.exception(
-                "Something went wrong while making a request to Spotify API. Try ")
+                "Something went wrong while making a request to Spotify API. Try again later.")
             return None
 
 
