@@ -28,24 +28,22 @@ async def nowPlaying(update: Update, context: CallbackContext) -> None:
         tg_id = str(update.message.from_user.id)
         is_user = DATABASE.fetch_user_data(tg_id)
         if is_user is None:
-            # TODO: pass "register" to /start
             button = InlineKeyboardMarkup(
-                [[InlineKeyboardButton(text='Register', url=BOT_URL)]])
+                [[InlineKeyboardButton(text='Register', url=f"{BOT_URL}?start=register")]])
             await update.effective_message.reply_text(REG_MSG, reply_markup=button)
 
             return ConversationHandler.END
         elif is_user['username'] == 'User':
-            # TODO: pass "name" to /start
             button = InlineKeyboardMarkup(
-                [[InlineKeyboardButton(text='Set username', url=BOT_URL)]])
+                [[InlineKeyboardButton(text='Contact in PM', url=BOT_URL)]])
             await update.effective_message.reply_text(
                 USR_NAME_MSG, reply_markup=button)
 
             return ConversationHandler.END
         elif is_user['token'] == '00000':
-            # TODO: pass "register" to /start
+            # TODO: I don't see this string occuring anywhere, so I'm not sure if this is even needed
             button = InlineKeyboardMarkup(
-                [[InlineKeyboardButton(text='Link account', url=BOT_URL)]])
+                [[InlineKeyboardButton(text='Register', url=f"{BOT_URL}?start=unregister")]])
             await update.effective_message.reply_text(
                 TOKEN_ERR_MSG, reply_markup=button)
 
@@ -56,7 +54,10 @@ async def nowPlaying(update: Update, context: CallbackContext) -> None:
             try:
                 r = SPOTIFY.getCurrentlyPlayingSong(token)
             except InvalidGrantError:
-                await update.message.reply_text("Your Spotify session has expired. Please log in again.")
+                button = InlineKeyboardMarkup(
+                    [[InlineKeyboardButton(text='Register', url=f"{BOT_URL}?start=unregister")]])
+                await update.effective_message.reply_text(
+                    "Your Spotify session has expired. Please register again.", reply_markup=button)
                 return
             except BaseException:
                 LOGGER.exception(
