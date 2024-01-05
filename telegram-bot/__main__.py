@@ -6,33 +6,30 @@ from telegram.constants import ParseMode
 from telegram.ext import CallbackContext, CommandHandler, ConversationHandler
 
 from sp_bot import BOT_URL, LOGGER, app
+from sp_bot.config import BOT_USERNAME
 from sp_bot.modules import ALL_MODULES
 from sp_bot.modules.db import DATABASE
 from sp_bot.modules.misc.request_spotify import SPOTIFY
+from sp_bot.modules.registration import register, unregister
 
 START_TEXT = """
 Hi {},
 
-Follow these steps to start using the bot -
-1. Use /register to connect your spotify account with this bot.
-2. Open the provided link, give access to the bot & you will be redirected to bot's telegram link.
-3. When you open that link you will be redirected back to telegram, click start.
-4. After you see a 'successful' message use /name to set a display name (this will be displayed on the song status).
-
-thats it! you can then share your song status using -
-/now or using the inline query @spotipiebot.
-
-use /help to get the list of commands.
+To start using the bot:
+1. Use /register to link your Spotify account with this bot.
+2. Open the provided link, give access to the bot.
+3. After you've been redirected back to the bot, click "Start".
 """
 
 HELP_TEXT = """
 Here's the list of commands:
 
-/now - share currently playing song on spotify.
-/name - change your username.
-/unregister - to unlink your spotify account from the bot.
-/register - to connect your spotify account with the bot.
-@spotipiebot - share song using inline query
+/now — Share currently playing song
+/name — Change your display name
+/unregister — Unlink your Spotify account from the bot
+/register — Connect your Spotify account with the bot
+
+You can also use inline queries to share songs from Spotify — just type `@{}` in any chat, and click the image to share the song you're currently listening to!
 """
 
 IMPORTED = {}
@@ -50,75 +47,79 @@ for module_name in ALL_MODULES:
             "Can't have two modules with the same name! Please change one")
 
 
-# /start command
 async def start(update: Update, context: CallbackContext):
-    """The /start command handler."""
+    """
+    The /start command handler.
+
+    Can be called manually, by clicking "Register" or "Unregister" buttons,
+    or by clicking "Start" button after authenticating with Spotify.
+    """
     if update.effective_chat.type == update.effective_chat.PRIVATE:
         first_name = update.effective_user.first_name
-        text = update.effective_message.text
-        if len(text) <= 10:
-            await update.effective_message.reply_text(
-                START_TEXT.format(first_name), parse_mode=ParseMode.MARKDOWN)
-        elif text.endswith('register'):
-            await update.message.reply_text("Use /register to connect your Spotify account.")
-        elif text.endswith('username'):
-            await update.message.reply_text(
-                "Use /name to change your display name.")
-        elif text.endswith('token'):
-            await update.message.reply_text(
-                "Use /unregister to unlink your account, then /register again.")
-        elif text.endswith('notsure'):
-            await update.message.reply_text("I'm not sure what you're listening to.")
-        elif text.endswith('ads'):
-            await update.message.reply_text(
-                "You're listening to ads!")
-        elif text.endswith('notlistening'):
-            await update.message.reply_text(
-                "You're not listening to anything at the moment.")
-        else:
-            _id = text[7:]
-            try:
-                codeObject = DATABASE.fetch_code(ObjectId(_id))
-                _ = DATABASE.delete_code(ObjectId(_id))
-            except BaseException:
-                LOGGER.exception(
-                    "An exception occurred in /start command handler while registering user")
-                await update.message.reply_text(
-                    "Something went wrong! Try using /register again.")
-                return ConversationHandler.END
+        args = context.args
 
-            if codeObject is None:
-                await update.message.reply_text(
-                    "Something went wrong! Try using /register again.")
-            else:
+        if len(args) > 0:
+            args[0] = args[0].lower()
+
+            if args[0] == 'register':
+                await register(update, context)
+            elif args[0] == 'unregister':
+                await unregister(update, context)
+            elif len(args[0]) == 24:
+                _id = args[0]
+
                 try:
-                    tg_id = str(update.effective_user.id)
-                    telegram_name = f"{update.effective_user.first_name} {update.effective_user.last_name}" if update.effective_user.last_name else update.effective_user.first_name
-
-                    is_user = DATABASE.fetch_user_data(tg_id)
-                    if is_user is not None:
-                        await update.message.reply_text(
-                            "You are already registered.\n\nIf you're having issues, try unlinking your account using /unregister, and using /register again.")
-                        return ConversationHandler.END
-                    authcode = codeObject["authCode"]
-                    refreshToken = SPOTIFY.getAccessToken(authcode)
-                    if refreshToken == 'error':
-                        await update.message.reply_text("Unable to authenticate. Please try /register again. If you're having issues using the bot, contact the developer.")
-                        return ConversationHandler.END
-                    DATABASE.add_user(name=telegram_name,
-                                      telegram_id=tg_id, token=refreshToken)
-                    await update.message.reply_text(
-                        "Account successfully linked. Use /name to set a display name, then use /now to use the bot.")
+                    codeObject = DATABASE.fetch_code(ObjectId(_id))
+                    _ = DATABASE.delete_code(ObjectId(_id))
                 except BaseException:
                     LOGGER.exception(
-                        "An exception occurred in start command handler")
-                    await update.message.reply_text("Oops! Something went wrong. Please try again later.")
+                        "An exception occurred in /start command handler while registering user")
+                    await update.message.reply_text(
+                        "Something went wrong! Try using /register again.")
                     return ConversationHandler.END
 
-        await update.effective_message.delete()
-        return ConversationHandler.END
-    else:
-        await update.effective_message.reply_text("Hmm?")
+                if codeObject is None:
+                    await update.message.reply_text(
+                        "Something went wrong! Try using /register again.")
+                else:
+                    try:
+                        tg_id = str(update.effective_user.id)
+                        telegram_name = f"{update.effective_user.first_name} {update.effective_user.last_name}" if update.effective_user.last_name else update.effective_user.first_name
+
+                        is_user = DATABASE.fetch_user_data(tg_id)
+                        if is_user is not None:
+                            await update.message.reply_text(
+                                "You are already registered.\n\nIf you're having issues, try unlinking your account using /unregister, and using /register again.")
+                            return ConversationHandler.END
+                        authcode = codeObject["authCode"]
+                        refreshToken = SPOTIFY.getAccessToken(authcode)
+                        if refreshToken == 'error':
+                            await update.message.reply_text("Unable to authenticate. Please try /register again. If you're having issues using the bot, contact the developer.")
+                            return ConversationHandler.END
+                        DATABASE.add_user(
+                            name=telegram_name,
+                            telegram_id=tg_id,
+                            token=refreshToken)
+                        await update.message.reply_text(
+                            """
+                            You're all set! Try using `/now` to see what you're listening to right now.
+                            You can also write {} in any chat to share what you're currently listening to.
+                            Use /help to see what else you can do.""")
+                    except BaseException:
+                        LOGGER.exception(
+                            "An exception occurred in start command handler")
+                        await update.message.reply_text("Oops! Something went wrong. Please try again later.")
+                        return ConversationHandler.END
+            else:
+                await update.effective_message.reply_text(
+                    START_TEXT.format(first_name), parse_mode=ParseMode.MARKDOWN)
+                return ConversationHandler.END
+        else:
+            await update.effective_message.reply_text(
+                START_TEXT.format(first_name), parse_mode=ParseMode.MARKDOWN)
+            return ConversationHandler.END
+
+        # await update.effective_message.delete()
         return ConversationHandler.END
 
 
@@ -130,7 +131,7 @@ async def help(update: Update, context: CallbackContext):
         return
 
     else:
-        await update.effective_message.reply_text(HELP_TEXT, parse_mode=ParseMode.MARKDOWN)
+        await update.effective_message.reply_text(HELP_TEXT.format(BOT_USERNAME), parse_mode=ParseMode.MARKDOWN)
 
 
 # main

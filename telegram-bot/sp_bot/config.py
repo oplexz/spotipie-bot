@@ -10,4 +10,5 @@ class Config:
     MONGO_DB = os.getenv('MONGO_DB')
     TEMP_CHANNEL = os.getenv('TEMP_CHANNEL')
     REDIRECT_URI = os.getenv('REDIRECT_URI')
-    BOT_URL = f"t.me/{os.getenv('BOT_USERNAME')}"
+    BOT_USERNAME = os.getenv('BOT_USERNAME')
+    BOT_URL = f"t.me/{BOT_USERNAME}"
