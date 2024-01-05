@@ -40,6 +40,7 @@ class MongoOperations:
         return self.cursor2.find().count()
 
     def add_user(self, telegram_id, token, name="User"):
+        """Adds the user to the database"""
         user = {
             'username': name,
             'token': token,
