@@ -7,7 +7,7 @@ from telegram import (InlineKeyboardButton, InlineKeyboardMarkup,
 from telegram.ext import (CallbackContext, ConversationHandler,
                           InlineQueryHandler)
 
-from sp_bot import BOT_URL, TEMP_CHANNEL, app
+from sp_bot import BOT_URL, LOGGER, TEMP_CHANNEL, app
 from sp_bot.modules.db import DATABASE
 from sp_bot.modules.misc.cook_image import draw_image
 from sp_bot.modules.misc.request_spotify import SPOTIFY, InvalidGrantError
@@ -87,10 +87,12 @@ async def inlineNowPlaying(update: Update, context: CallbackContext):
                     cache_time=0
                 )
                 return
-            except Exception as e:
-                print(f"An error occurred: {str(e)}")
-    except Exception as ex:
-        print(ex)
+            except BaseException:
+                LOGGER.exception(
+                    "An exception occurred in inlineNowPlaying while trying to get token")
+    except BaseException:
+        LOGGER.exception(
+            "An exception occurred in inlineNowPlaying while trying to get user data")
         return
 
     try:
@@ -148,8 +150,9 @@ async def inlineNowPlaying(update: Update, context: CallbackContext):
                 ],
                 cache_time=0
             )
-    except Exception as ex:
-        print(ex)
+    except BaseException:
+        LOGGER.exception(
+            "An exception occurred in inlineNowPlaying while fetching song data/generating, or sending the image")
         await update.inline_query.answer(
             [
                 InlineQueryResultArticle(

@@ -1,9 +1,8 @@
 import json
-import logging
 
 import requests
 
-from sp_bot import CLIENT_ID, CLIENT_SECRET, REDIRECT_URI
+from sp_bot import CLIENT_ID, CLIENT_SECRET, LOGGER, REDIRECT_URI
 
 
 class InvalidGrantError(Exception):
@@ -77,7 +76,7 @@ class SpotifyUser:
         except InvalidGrantError:
             raise
         except BaseException:
-            logging.exception(
+            LOGGER.exception(
                 "Something went wrong while making a request to Spotify API. Try again later.")
             return None
 

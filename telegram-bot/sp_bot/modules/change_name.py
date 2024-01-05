@@ -1,9 +1,8 @@
-import logging
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import (CallbackContext, CommandHandler, ConversationHandler,
                           MessageHandler, filters)
 
-from sp_bot import BOT_URL, app
+from sp_bot import BOT_URL, LOGGER, app
 from sp_bot.modules.db import DATABASE
 
 PM_MSG = "Contact me in PM to change your username."
@@ -53,7 +52,7 @@ async def setUsername(update: Update, context: CallbackContext) -> None:
                 return ConversationHandler.END
 
         except BaseException:
-            logging.exception("An exception occurred in setUsername")
+            LOGGER.exception("An exception occurred in setUsername")
             await update.message.reply_text("Oops! Something went wrong. Please try again later.")
             return ConversationHandler.END
 

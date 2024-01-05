@@ -34,20 +34,17 @@ def check_unicode(text: str):
 
 
 def draw_album_art(canvas: Image, cover_art_url: str):
-    try:
-        response = requests.get(cover_art_url)
-        album_art = Image.open(BytesIO(response.content))
-        background = album_art.copy()
-        background = background.convert('RGBA')
-        background = ImageOps.fit(background, CARD_SIZE, Image.LANCZOS)
-        background = background.filter(ImageFilter.GaussianBlur(10))
-        dimmed_background = Image.new('RGBA', CARD_SIZE, (0, 0, 0, 128))
-        canvas.paste(background, (0, 0), mask=dimmed_background)
+    response = requests.get(cover_art_url)
+    album_art = Image.open(BytesIO(response.content))
+    background = album_art.copy()
+    background = background.convert('RGBA')
+    background = ImageOps.fit(background, CARD_SIZE, Image.LANCZOS)
+    background = background.filter(ImageFilter.GaussianBlur(10))
+    dimmed_background = Image.new('RGBA', CARD_SIZE, (0, 0, 0, 128))
+    canvas.paste(background, (0, 0), mask=dimmed_background)
 
-        album_art.thumbnail((THUMBNAIL_SIZE, THUMBNAIL_SIZE), Image.LANCZOS)
-        canvas.paste(album_art, (EDGE_GAP, EDGE_GAP))
-    except Exception as ex:
-        print(ex)
+    album_art.thumbnail((THUMBNAIL_SIZE, THUMBNAIL_SIZE), Image.LANCZOS)
+    canvas.paste(album_art, (EDGE_GAP, EDGE_GAP))
 
 
 def draw_profile_picture(canvas: Image, profile_picture):
@@ -61,7 +58,7 @@ def draw_text_on_canvas(draw: ImageDraw, username: str,
     fill_color = '#ffffff'
 
     username = truncate(username, FONT_POPPINS, 500)
-    is_listening_to = 'is listening to'
+    is_listening_to = "is listening to"
     song_name = truncate(song_name, FONT_POPPINS if check_unicode(
         song_name) else FONT_ARIAL, 630)
     artists = truncate(artists, FONT_OPEN_SANS if check_unicode(

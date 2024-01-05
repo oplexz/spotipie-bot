@@ -1,7 +1,7 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import CallbackContext, CommandHandler, ConversationHandler
 
-from sp_bot import BOT_URL, app
+from sp_bot import BOT_URL, LOGGER, app
 from sp_bot.modules.db import DATABASE
 from sp_bot.modules.misc.request_spotify import SPOTIFY
 
@@ -50,8 +50,9 @@ async def unregister(update: Update, context: CallbackContext) -> None:
                 await update.message.reply_text("Account successfully removed.")
                 return ConversationHandler.END
 
-        except Exception as ex:
-            print(ex)
+        except BaseException:
+            LOGGER.exception(
+                "An exception occurred in unregister command handler (most likely a database error)")
             await update.effective_message.reply_text("Oops! Something went wrong. Please try again later.")
             return ConversationHandler.END
     else:

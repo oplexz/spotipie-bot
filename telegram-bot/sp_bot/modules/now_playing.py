@@ -1,11 +1,9 @@
-import logging
-
 import requests
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.constants import ChatAction
 from telegram.ext import CallbackContext, CommandHandler, ConversationHandler
 
-from sp_bot import BOT_URL, app
+from sp_bot import BOT_URL, LOGGER, app
 from sp_bot.modules.db import DATABASE
 from sp_bot.modules.misc.cook_image import draw_image
 from sp_bot.modules.misc.request_spotify import SPOTIFY, InvalidGrantError
@@ -60,10 +58,12 @@ async def nowPlaying(update: Update, context: CallbackContext) -> None:
             except InvalidGrantError:
                 await update.message.reply_text("Your Spotify session has expired. Please log in again.")
                 return
-            except Exception as e:
-                print(f"An error occurred: {str(e)}")
+            except BaseException:
+                LOGGER.exception(
+                    "An exception occurred in nowPlaying while fetching token")
     except BaseException:
-        logging.exception("Got an error")
+        LOGGER.exception(
+            "An exception occurred in nowPlaying while fetching user data")
         await update.message.reply_text("Oops! Something went wrong. Please try again later.")
         return
 
@@ -96,8 +96,9 @@ async def nowPlaying(update: Update, context: CallbackContext) -> None:
     except BaseException:
         # The user is most likely not listening to anything, but we never know...
         # or, well, I haven't really tested it yet...
-        logging.exception("Got an error")
-        update.message.reply_text("You are not listening to anything.")
+        LOGGER.exception(
+            "An exception occurred in nowPlaying while fetching song data/generating, or sending the image")
+        await update.message.reply_text("You are not listening to anything.")
         # await update.message.reply_text("Oops! Something went wrong. Please
         # try again later.")
 

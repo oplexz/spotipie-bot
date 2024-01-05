@@ -80,15 +80,16 @@ async def start(update: Update, context: CallbackContext):
             try:
                 codeObject = DATABASE.fetch_code(ObjectId(_id))
                 _ = DATABASE.delete_code(ObjectId(_id))
-            except Exception as ex:
+            except BaseException:
+                LOGGER.exception(
+                    "An exception occurred in /start command handler while registering user")
                 await update.message.reply_text(
-                    "Use /register to connect your Spotify account.")
-                LOGGER.exception(ex)
+                    "Something went wrong! Try using /register again.")
                 return ConversationHandler.END
 
             if codeObject is None:
                 await update.message.reply_text(
-                    "Use /register to connect your Spotify account.")
+                    "Something went wrong! Try using /register again.")
             else:
                 try:
                     tg_id = str(update.effective_user.id)
