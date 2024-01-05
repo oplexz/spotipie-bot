@@ -5,7 +5,7 @@ from telegram.ext import (CallbackContext, CommandHandler, ConversationHandler,
 from sp_bot import BOT_URL, LOGGER, app
 from sp_bot.modules.db import DATABASE
 
-PM_MSG = "Contact me in PM to change your username."
+PM_MSG = "Contact me in PM to change your display name."
 REG_MSG = "You need to register first. Use /register to get started."
 
 
@@ -16,12 +16,12 @@ async def getUsername(update: Update, context: CallbackContext) -> None:
     Asks the user to send a username, which is then passed to `setUsername`.
     """
     if update.effective_chat.type != update.effective_chat.PRIVATE:
-        # TODO: pass "name" to /start
         button = InlineKeyboardMarkup(
-            [[InlineKeyboardButton(text="Change display name", url=BOT_URL)]])
+            [[InlineKeyboardButton(text="Contact in PM", url=BOT_URL)]])
         await update.effective_message.reply_text(PM_MSG, reply_markup=button)
         return ConversationHandler.END
-    await update.effective_message.reply_text("What name do you want to use? (max 15 characters)\n\nYou can use /cancel to keep your current name.")
+    else:
+        await update.effective_message.reply_text("What name do you want to use? (max 15 characters)\n\nYou can use /cancel to keep your current name.")
     return USERNAME
 
 
