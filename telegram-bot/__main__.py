@@ -5,8 +5,7 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.constants import ParseMode
 from telegram.ext import CallbackContext, CommandHandler, ConversationHandler
 
-from sp_bot import BOT_URL, LOGGER, app
-from sp_bot.config import BOT_USERNAME
+from sp_bot import BOT_USERNAME, BOT_URL, LOGGER, app
 from sp_bot.modules import ALL_MODULES
 from sp_bot.modules.db import DATABASE
 from sp_bot.modules.misc.request_spotify import SPOTIFY

@@ -21,6 +21,7 @@ MONGO_USER = Config.MONGO_USER
 MONGO_PASSWORD = Config.MONGO_PASSWORD
 MONGO_DB = Config.MONGO_DB
 TEMP_CHANNEL = Config.TEMP_CHANNEL
+BOT_USERNAME = Config.BOT_USERNAME
 BOT_URL = Config.BOT_URL
 
 app = ApplicationBuilder().token(TOKEN).build()
